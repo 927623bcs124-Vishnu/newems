@@ -31,3 +31,13 @@ export type AttendanceRecord = {
   clockIn?: string;
   clockOut?: string;
 };
+
+export type Payslip = {
+  id: string;
+  userId: string;
+  month: string;
+  year: number;
+  netPay: number;
+  status: 'Paid' | 'Pending';
+  url: string;
+};

@@ -8,7 +8,7 @@ import {
     SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, User, FileText, Users, Shield, Lightbulb, Clock } from "lucide-react";
+import { LayoutDashboard, User, FileText, Users, Shield, Lightbulb, Clock, DollarSign } from "lucide-react";
 import type { User as UserType } from "@/lib/types";
 
 interface MainNavProps {
@@ -41,6 +41,12 @@ export function MainNav({ currentUser }: MainNavProps) {
             href: "/dashboard/leave",
             label: "Leave",
             icon: FileText,
+            roles: ['employee', 'manager', 'admin'],
+        },
+        {
+            href: "/dashboard/payroll",
+            label: "Payroll",
+            icon: DollarSign,
             roles: ['employee', 'manager', 'admin'],
         },
         {

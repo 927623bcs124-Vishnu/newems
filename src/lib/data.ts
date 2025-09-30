@@ -1,4 +1,4 @@
-import type { User, LeaveRequest, AttendanceRecord } from './types';
+import type { User, LeaveRequest, AttendanceRecord, Payslip } from './types';
 
 // Mock Users
 export const users: User[] = [
@@ -51,7 +51,7 @@ export const users: User[] = [
 ];
 
 // Current user can be switched to test different roles
-export const currentUser: User = users[1]; // 0: employee, 1: manager, 4: admin
+export const currentUser: User = users[0]; // 0: employee, 1: manager, 4: admin
 
 // Mock Leave Requests
 export const leaveRequests: LeaveRequest[] = [
@@ -67,4 +67,13 @@ export const attendanceRecords: AttendanceRecord[] = [
   { id: 'ar1', userId: '1', userName: 'Alex Doe', date: today, status: 'Present', clockIn: '09:05 AM', clockOut: '05:30 PM' },
   { id: 'ar2', userId: '3', userName: 'Peter Jones', date: today, status: 'Absent' },
   { id: 'ar3', userId: '4', userName: 'Sara Williams', date: today, status: 'On Leave' },
+];
+
+// Mock Payslips
+export const payslips: Payslip[] = [
+    { id: 'ps1', userId: '1', month: 'July', year: 2024, netPay: 4500, status: 'Paid', url: '/payslips/july-2024.pdf' },
+    { id: 'ps2', userId: '1', month: 'June', year: 2024, netPay: 4450, status: 'Paid', url: '/payslips/june-2024.pdf' },
+    { id: 'ps3', userId: '1', month: 'May', year: 2024, netPay: 4550, status: 'Paid', url: '/payslips/may-2024.pdf' },
+    { id: 'ps4', userId: '2', month: 'July', year: 2024, netPay: 7500, status: 'Paid', url: '/payslips/july-2024.pdf' },
+    { id: 'ps5', userId: '3', month: 'July', year: 2024, netPay: 4800, status: 'Paid', url: '/payslips/july-2024.pdf' },
 ];
