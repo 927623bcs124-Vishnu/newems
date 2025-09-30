@@ -10,7 +10,6 @@ import {
   SidebarFooter
 } from "@/components/ui/sidebar";
 import { Button } from '@/components/ui/button';
-import { currentUser } from '@/lib/data';
 import { Header } from '@/components/app/header';
 import { MainNav } from '@/components/app/main-nav';
 import { Badge } from '@/components/ui/badge';
@@ -19,7 +18,8 @@ import Link from 'next/link';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { users, type User as UserType } from '@/lib/data';
 
 export default function DashboardLayout({
   children,
@@ -28,14 +28,21 @@ export default function DashboardLayout({
 }) {
   const [user, loading] = useAuthState(auth);
   const router = useRouter();
+  const [currentUser, setCurrentUser] = useState<UserType | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
     }
+    if (user) {
+      // In a real app, you would fetch user details from your database
+      // For now, we'll find the user in our mock data
+      const appUser = users.find(u => u.email === user.email);
+      setCurrentUser(appUser || null);
+    }
   }, [user, loading, router]);
 
-  if (loading || !user) {
+  if (loading || !user || !currentUser) {
     return (
         <div className="flex min-h-screen items-center justify-center">
             <p>Loading...</p>
