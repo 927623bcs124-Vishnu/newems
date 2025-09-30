@@ -12,8 +12,18 @@ import {
 import { currentUser } from "@/lib/data"
 import { LogOut, Settings, User as UserIcon } from "lucide-react"
 import Link from "next/link"
+import { auth } from "@/lib/firebase";
+import { signOut } from "firebase/auth"
+import { useRouter } from "next/navigation"
 
 export function UserNav() {
+  const router = useRouter();
+  const handleLogout = () => {
+    signOut(auth).then(() => {
+      router.push('/login');
+    });
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -47,7 +57,7 @@ export function UserNav() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
         </DropdownMenuItem>

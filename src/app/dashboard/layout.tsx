@@ -1,3 +1,5 @@
+'use client'
+
 import type { Metadata } from 'next';
 import {
   SidebarProvider,
@@ -14,24 +16,31 @@ import { MainNav } from '@/components/app/main-nav';
 import { Badge } from '@/components/ui/badge';
 import { Bell } from 'lucide-react';
 import Link from 'next/link';
-
-export const metadata: Metadata = {
-  title: 'Dashboard - EmployEase',
-  description: 'Your employee management dashboard.',
-};
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/lib/firebase';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [user, loading] = useAuthState(auth);
+  const router = useRouter();
 
-  // We can get the current path to set the header title
-  // For now, it is hardcoded.
-  // In a real app, you might use a hook or context to manage this.
-  const getTitle = () => {
-    // A real implementation would parse the pathname
-    return "Dashboard";
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  if (loading || !user) {
+    return (
+        <div className="flex min-h-screen items-center justify-center">
+            <p>Loading...</p>
+        </div>
+    );
   }
 
   return (
