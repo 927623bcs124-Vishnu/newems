@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { MoreHorizontal, ArrowUpRight, Clock, CalendarOff, UserCheck, UserX } from "lucide-react"
+import { MoreHorizontal, ArrowUpRight, Clock, CalendarOff, UserCheck, UserX, Users, FileText, Lightbulb } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
     DropdownMenu,
@@ -139,7 +139,18 @@ const AdminDashboard = () => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    <Link href="/dashboard/policy-suggestion">
+                    <Link href="/dashboard/employees">
+                        <Card className="hover:bg-muted cursor-pointer transition-colors">
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                <CardTitle className="text-sm font-medium">Manage Employees</CardTitle>
+                                <Users className="h-4 w-4 text-muted-foreground" />
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-xs text-muted-foreground">Add, edit, or remove employee records.</p>
+                            </CardContent>
+                        </Card>
+                    </Link>
+                     <Link href="/dashboard/policy-suggestion">
                         <Card className="hover:bg-muted cursor-pointer transition-colors">
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">AI Policy Suggestions</CardTitle>
@@ -150,15 +161,6 @@ const AdminDashboard = () => {
                             </CardContent>
                         </Card>
                     </Link>
-                    <Card className="hover:bg-muted cursor-pointer transition-colors">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Manage Employees</CardTitle>
-                            <Users className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-xs text-muted-foreground">Add, edit, or remove employee records.</p>
-                        </CardContent>
-                    </Card>
                     <Card className="hover:bg-muted cursor-pointer transition-colors">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Payroll Processing</CardTitle>
@@ -255,7 +257,3 @@ const TeamMembersTable = () => {
         </Table>
     );
 }
-
-const Lightbulb = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="currentColor" d="M12 22q-.825 0-1.413-.588T10 20h4q0 .825-.588 1.413T12 22M9.15 18h5.7q-.25.65-.788 1.075T12 19.5q-.9 0-1.438-.425T9.15 18m.35-2.5q-1.125-.55-1.838-1.588T7 11.6q0-2.35 1.5-4.025T12 6.1q1.45 0 2.825.813T16.5 9.55q-.525-.3-1.1-.425t-1.2-.125q-1.925 0-3.363 1.338T9.5 13.6q0 .95.45 1.75t1.2 1.3l.65.4q-.225.25-.463.513T10.7 18.2q-.525-.425-.775-1.013T9.5 16.15q0-.325.075-.638T9.75 15M12 5q-.425 0-.713-.288T11 4q0-.425.288-.713T12 3q.425 0 .713.288T13 4q0 .425-.288.713T12 5m-4 2q-.425 0-.713-.288T7 6q0-.425.288-.713T8 5q.425 0 .713.288T9 6q0 .425-.288.713T8 7m8 0q-.425 0-.713-.288T15 6q0-.425.288-.713T16 5q.425 0 .713.288T17 6q0 .425-.288.713T16 7"/></svg>
-)

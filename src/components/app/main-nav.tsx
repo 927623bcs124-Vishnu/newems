@@ -56,6 +56,12 @@ export function MainNav({ currentUser }: MainNavProps) {
             roles: ['manager'],
         },
         {
+            href: "/dashboard/employees",
+            label: "Employees",
+            icon: Users,
+            roles: ['admin'],
+        },
+        {
             href: "/dashboard/policy-suggestion",
             label: "Policy AI",
             icon: Lightbulb,
