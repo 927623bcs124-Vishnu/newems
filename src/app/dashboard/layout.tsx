@@ -36,13 +36,25 @@ export default function DashboardLayout({
     }
     if (user) {
       // In a real app, you would fetch user details from your database
-      // For now, we'll find the user in our mock data
-      const appUser = users.find(u => u.email === user.email);
-      setCurrentUser(appUser || null);
+      // For now, we'll find the user in our mock data or create a default one
+      let appUser = users.find(u => u.email === user.email);
+      if (!appUser) {
+        // Create a default user object for new sign-ups
+        appUser = {
+          id: user.uid,
+          name: user.displayName || 'New User',
+          email: user.email!,
+          role: 'employee',
+          avatar: user.photoURL || `https://picsum.photos/seed/${user.uid}/100/100`,
+          department: 'Unassigned',
+          position: 'New Hire',
+        };
+      }
+      setCurrentUser(appUser);
     }
   }, [user, loading, router]);
 
-  if (loading || !user || !currentUser) {
+  if (loading || !currentUser) {
     return (
         <div className="flex min-h-screen items-center justify-center">
             <p>Loading...</p>
