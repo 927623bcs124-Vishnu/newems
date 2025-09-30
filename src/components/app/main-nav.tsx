@@ -1,15 +1,17 @@
 'use client';
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
     SidebarMenu,
     SidebarMenuItem,
     SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, User, FileText, Users, Shield, Lightbulb, Clock, DollarSign } from "lucide-react";
+import { LayoutDashboard, User, FileText, Users, Shield, Lightbulb, Clock, DollarSign, LogOut } from "lucide-react";
 import type { User as UserType } from "@/lib/types";
+import { auth } from "@/lib/firebase";
+import { signOut } from "firebase/auth";
 
 interface MainNavProps {
     currentUser: UserType;
@@ -17,6 +19,13 @@ interface MainNavProps {
 
 export function MainNav({ currentUser }: MainNavProps) {
     const pathname = usePathname();
+    const router = useRouter();
+
+    const handleLogout = () => {
+        signOut(auth).then(() => {
+          router.push('/login');
+        });
+    };
 
     const menuItems = [
         {
@@ -91,6 +100,17 @@ export function MainNav({ currentUser }: MainNavProps) {
                     </SidebarMenuItem>
                 )
             )}
+            <SidebarMenuItem>
+                <SidebarMenuButton
+                    className="w-full justify-start"
+                    onClick={handleLogout}
+                >
+                    <span>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Log out
+                    </span>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
         </SidebarMenu>
     );
 }
