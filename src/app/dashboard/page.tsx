@@ -17,6 +17,7 @@ import {
   } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
     const todayAttendance = attendanceRecords.find(ar => ar.userId === currentUser.id && ar.date === new Date().toISOString().split('T')[0]);
@@ -36,12 +37,22 @@ export default function DashboardPage() {
 }
 
 const EmployeeDashboard = () => {
+    const router = useRouter();
     const userLeaves = leaveRequests.filter(lr => lr.userId === currentUser.id).slice(0, 5);
-    const [today, setToday] = useState('');
+    const [currentTime, setCurrentTime] = useState('');
+    const [todayString, setTodayString] = useState('');
 
     useEffect(() => {
-        setToday(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+        const today = new Date();
+        setCurrentTime(today.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+        setTodayString(today.toISOString().split('T')[0]);
     }, []);
+
+    const todaysRecord = attendanceRecords.find(ar => ar.userId === currentUser.id && ar.date === todayString);
+
+    const handleClockInOut = () => {
+        router.push('/dashboard/attendance');
+    }
 
     return (
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
@@ -52,8 +63,12 @@ const EmployeeDashboard = () => {
                 </CardHeader>
                 <CardContent>
                     <p className="text-xs text-muted-foreground">Status for today</p>
-                    <div className="text-2xl font-bold text-primary">Present</div>
-                    <Button className="mt-4 w-full">Clock Out at {today}</Button>
+                    <div className="text-2xl font-bold text-primary">{todaysRecord?.status ?? 'Absent'}</div>
+                    <Button onClick={handleClockInOut} className="mt-4 w-full">
+                        {todaysRecord && todaysRecord.clockIn ? 
+                            (todaysRecord.clockOut ? `Clocked Out at ${todaysRecord.clockOut}`: `Clock Out at ${currentTime}`)
+                            : "Clock In"}
+                    </Button>
                 </CardContent>
             </Card>
             <Card>
