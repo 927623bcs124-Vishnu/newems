@@ -50,8 +50,6 @@ export const users: User[] = [
   },
 ];
 
-// Current user can be switched to test different roles
-export const currentUser: User = users[0]; // 0: employee, 1: manager, 4: admin
 
 // Mock Leave Requests
 export const leaveRequests: LeaveRequest[] = [

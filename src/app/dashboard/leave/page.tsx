@@ -1,3 +1,6 @@
+
+'use client';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,10 +12,15 @@ import { Calendar } from "@/components/ui/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { leaveRequests, currentUser } from "@/lib/data";
+import { leaveRequests } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { useUser } from "@/lib/context/user-context";
 
 export default function LeavePage() {
+    const currentUser = useUser();
+
+    if (!currentUser) return <div>Loading...</div>;
+
     const userLeaves = leaveRequests.filter(lr => lr.userId === currentUser.id);
 
     return (

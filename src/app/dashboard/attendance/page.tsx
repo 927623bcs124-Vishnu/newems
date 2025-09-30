@@ -4,22 +4,31 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { attendanceRecords, currentUser } from "@/lib/data";
+import { attendanceRecords } from "@/lib/data";
 import { Clock } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useUser } from "@/lib/context/user-context";
 
 export default function AttendancePage() {
+    const currentUser = useUser();
     const [currentTime, setCurrentTime] = useState('');
     const [currentDate, setCurrentDate] = useState('');
     const [todayString, setTodayString] = useState('');
 
     useEffect(() => {
+        const timer = setInterval(() => {
+            const now = new Date();
+            setCurrentTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+        }, 1000);
+
         const today = new Date();
-        setCurrentTime(today.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
         setCurrentDate(today.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
         setTodayString(today.toISOString().split('T')[0]);
+
+        return () => clearInterval(timer);
     }, []);
 
+    if (!currentUser) return <div>Loading...</div>;
 
     const userAttendance = attendanceRecords.filter(ar => ar.userId === currentUser.id);
     const todaysRecord = userAttendance.find(r => r.date === todayString);

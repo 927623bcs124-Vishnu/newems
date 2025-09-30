@@ -1,7 +1,7 @@
 
 'use client';
 
-import { currentUser, leaveRequests, attendanceRecords, users } from "@/lib/data"
+import { leaveRequests, attendanceRecords, users } from "@/lib/data"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -18,10 +18,13 @@ import {
 import Link from "next/link"
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/lib/context/user-context";
 
 export default function DashboardPage() {
-    const todayAttendance = attendanceRecords.find(ar => ar.userId === currentUser.id && ar.date === new Date().toISOString().split('T')[0]);
+    const currentUser = useUser();
   
+    if (!currentUser) return <div>Loading...</div>;
+
     return (
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
             <div className="flex items-center">
@@ -38,14 +41,23 @@ export default function DashboardPage() {
 
 const EmployeeDashboard = () => {
     const router = useRouter();
+    const currentUser = useUser();
+    if (!currentUser) return null;
+
     const userLeaves = leaveRequests.filter(lr => lr.userId === currentUser.id).slice(0, 5);
     const [currentTime, setCurrentTime] = useState('');
     const [todayString, setTodayString] = useState('');
 
     useEffect(() => {
+        const timer = setInterval(() => {
+            const now = new Date();
+            setCurrentTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+        }, 1000);
+
         const today = new Date();
-        setCurrentTime(today.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
         setTodayString(today.toISOString().split('T')[0]);
+
+        return () => clearInterval(timer);
     }, []);
 
     const todaysRecord = attendanceRecords.find(ar => ar.userId === currentUser.id && ar.date === todayString);
@@ -66,7 +78,7 @@ const EmployeeDashboard = () => {
                     <div className="text-2xl font-bold text-primary">{todaysRecord?.status ?? 'Absent'}</div>
                     <Button onClick={handleClockInOut} className="mt-4 w-full">
                         {todaysRecord && todaysRecord.clockIn ? 
-                            (todaysRecord.clockOut ? `Clocked Out at ${todaysRecord.clockOut}`: `Clock Out at ${currentTime}`)
+                            (todaysRecord.clockOut ? `Clocked Out at ${todaysRecord.clockOut}`: `Clock Out`)
                             : "Clock In"}
                     </Button>
                 </CardContent>
@@ -98,6 +110,9 @@ const EmployeeDashboard = () => {
 }
 
 const ManagerDashboard = () => {
+    const currentUser = useUser();
+    if (!currentUser) return null;
+
     const pendingRequests = leaveRequests.filter(
         (lr) => currentUser.team?.includes(lr.userId) && lr.status === 'Pending'
     );
@@ -225,6 +240,9 @@ const LeaveHistoryTable = ({ leaves }: { leaves: typeof leaveRequests }) => (
 )
 
 const TeamMembersTable = () => {
+    const currentUser = useUser();
+    if (!currentUser) return null;
+    
     const teamMembers = users.filter(user => currentUser.team?.includes(user.id));
     const teamMemberAttendance = attendanceRecords.filter(ar => currentUser.team?.includes(ar.userId));
 

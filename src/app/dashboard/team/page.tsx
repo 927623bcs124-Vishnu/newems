@@ -1,13 +1,21 @@
+
+'use client';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { leaveRequests, attendanceRecords, currentUser, users } from "@/lib/data";
+import { leaveRequests, attendanceRecords, users } from "@/lib/data";
 import { Check, X } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useUser } from "@/lib/context/user-context";
 
 export default function TeamPage() {
+    const currentUser = useUser();
+    
+    if (!currentUser) return <div>Loading...</div>;
+
     if (currentUser.role !== 'manager') {
         return (
             <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">

@@ -1,10 +1,31 @@
+
+'use client';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { currentUser, users } from "@/lib/data";
+import { users } from "@/lib/data";
 import { EmployeeTable } from "@/components/app/employee-table";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
+import { useUser } from "@/lib/context/user-context";
 
 export default function EmployeesPage() {
+    const currentUser = useUser();
+
+    if (!currentUser) {
+        return (
+            <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Loading...</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p>Loading user data...</p>
+                    </CardContent>
+                </Card>
+            </main>
+        );
+    }
+
     if (currentUser.role !== 'admin') {
         return (
             <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">

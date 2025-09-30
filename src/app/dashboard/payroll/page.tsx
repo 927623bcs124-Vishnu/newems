@@ -1,12 +1,19 @@
+
+'use client';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { payslips, currentUser } from "@/lib/data";
+import { payslips } from "@/lib/data";
 import { Download } from "lucide-react";
 import Link from "next/link";
+import { useUser } from "@/lib/context/user-context";
 
 export default function PayrollPage() {
+    const currentUser = useUser();
+    if (!currentUser) return <div>Loading...</div>;
+    
     const userPayslips = payslips.filter(p => p.userId === currentUser.id);
 
     return (

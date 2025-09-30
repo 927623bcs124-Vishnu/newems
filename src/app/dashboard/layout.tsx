@@ -1,3 +1,4 @@
+
 'use client'
 
 import type { Metadata } from 'next';
@@ -20,6 +21,7 @@ import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { users, type User as UserType } from '@/lib/data';
+import { UserContext } from '@/lib/context/user-context';
 
 export default function DashboardLayout({
   children,
@@ -63,30 +65,32 @@ export default function DashboardLayout({
   }
 
   return (
-    <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader>
-            <div className="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-8 h-8 text-primary-foreground"><path fill="currentColor" d="M12.75 2.75a.75.75 0 0 0-1.5 0v8.5a.75.75 0 0 0 1.5 0v-8.5Z M16.5 6.5a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z M4.25 6.5a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z M12 12.75a.75.75 0 0 1-.75.75h-8.5a.75.75 0 0 1 0-1.5h8.5a.75.75 0 0 1 .75.75Zm.75 4.5a.75.75 0 0 0-1.5 0v4a.75.75 0 0 0 1.5 0v-4Z M16.5 14a.75.75 0 0 1 .75-.75h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75Zm-9.5 6.5a.75.75 0 0 1 .75-.75h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75Z"/></svg>
-                <Link href="/dashboard">
-                    <h2 className="text-xl font-bold tracking-tight text-primary-foreground">EmployEase</h2>
-                </Link>
-            </div>
-        </SidebarHeader>
-        <SidebarContent>
-            <MainNav currentUser={currentUser} />
-        </SidebarContent>
-        <SidebarFooter>
-            <Button variant="ghost" className="w-full justify-start">
-                <Bell className="mr-2 h-4 w-4" />
-                Notifications
-                <Badge variant="destructive" className="ml-auto">3</Badge>
-            </Button>
-        </SidebarFooter>
-      </Sidebar>
-      <SidebarInset>
-        {children}
-      </SidebarInset>
-    </SidebarProvider>
+    <UserContext.Provider value={currentUser}>
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarHeader>
+              <div className="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-8 h-8 text-primary-foreground"><path fill="currentColor" d="M12.75 2.75a.75.75 0 0 0-1.5 0v8.5a.75.75 0 0 0 1.5 0v-8.5Z M16.5 6.5a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z M4.25 6.5a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z M12 12.75a.75.75 0 0 1-.75.75h-8.5a.75.75 0 0 1 0-1.5h8.5a.75.75 0 0 1 .75.75Zm.75 4.5a.75.75 0 0 0-1.5 0v4a.75.75 0 0 0 1.5 0v-4Z M16.5 14a.75.75 0 0 1 .75-.75h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75Zm-9.5 6.5a.75.75 0 0 1 .75-.75h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75Z"/></svg>
+                  <Link href="/dashboard">
+                      <h2 className="text-xl font-bold tracking-tight text-primary-foreground">EmployEase</h2>
+                  </Link>
+              </div>
+          </SidebarHeader>
+          <SidebarContent>
+              <MainNav currentUser={currentUser} />
+          </SidebarContent>
+          <SidebarFooter>
+              <Button variant="ghost" className="w-full justify-start">
+                  <Bell className="mr-2 h-4 w-4" />
+                  Notifications
+                  <Badge variant="destructive" className="ml-auto">3</Badge>
+              </Button>
+          </SidebarFooter>
+        </Sidebar>
+        <SidebarInset>
+          {children}
+        </SidebarInset>
+      </SidebarProvider>
+    </UserContext.Provider>
   );
 }
