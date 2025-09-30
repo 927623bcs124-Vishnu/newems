@@ -1,13 +1,27 @@
+
+'use client';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { attendanceRecords, currentUser } from "@/lib/data";
 import { Clock } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function AttendancePage() {
+    const [currentTime, setCurrentTime] = useState('');
+    const [currentDate, setCurrentDate] = useState('');
+    const [todayString, setTodayString] = useState('');
+
+    useEffect(() => {
+        const today = new Date();
+        setCurrentTime(today.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+        setCurrentDate(today.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
+        setTodayString(today.toISOString().split('T')[0]);
+    }, []);
+
+
     const userAttendance = attendanceRecords.filter(ar => ar.userId === currentUser.id);
-    const today = new Date();
-    const todayString = today.toISOString().split('T')[0];
     const todaysRecord = userAttendance.find(r => r.date === todayString);
 
     const handleClockIn = () => {
@@ -32,8 +46,8 @@ export default function AttendancePage() {
                         <CardContent className="space-y-4">
                             <div className="flex items-center justify-center p-4 bg-muted rounded-lg">
                                 <div className="text-center">
-                                    <p className="text-5xl font-bold">{today.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                                    <p className="text-muted-foreground">{today.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                                    <p className="text-5xl font-bold">{currentTime || '...'}</p>
+                                    <p className="text-muted-foreground">{currentDate || '...'}</p>
                                 </div>
                             </div>
                             {todaysRecord && todaysRecord.clockIn ? (

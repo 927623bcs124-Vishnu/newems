@@ -1,3 +1,6 @@
+
+'use client';
+
 import { currentUser, leaveRequests, attendanceRecords, users } from "@/lib/data"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -13,6 +16,7 @@ import {
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
+import { useState, useEffect } from "react";
 
 export default function DashboardPage() {
     const todayAttendance = attendanceRecords.find(ar => ar.userId === currentUser.id && ar.date === new Date().toISOString().split('T')[0]);
@@ -33,7 +37,11 @@ export default function DashboardPage() {
 
 const EmployeeDashboard = () => {
     const userLeaves = leaveRequests.filter(lr => lr.userId === currentUser.id).slice(0, 5);
-    const today = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const [today, setToday] = useState('');
+
+    useEffect(() => {
+        setToday(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    }, []);
 
     return (
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
